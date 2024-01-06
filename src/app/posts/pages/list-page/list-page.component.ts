@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { PostService } from '../../services/post.service'
+import { ApiResp } from '../../interfaces/post';
 
 @Component({
   selector: 'app-list-page',
@@ -7,4 +9,15 @@ import { Component } from '@angular/core';
 })
 export class ListPageComponent {
 
+  public apiResp?: ApiResp;
+
+  constructor(private postService: PostService) {}
+
+  ngOnInit(): void {
+    this.postService.getPosts()
+      .subscribe( (resp: ApiResp) => {
+        this.apiResp = resp;
+        console.log(this.apiResp);
+      });
+  }
 }
