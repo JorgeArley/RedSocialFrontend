@@ -5,6 +5,8 @@ import { ListPageComponent } from './pages/list-page/list-page.component';
 import { PostsRoutingModule } from './posts-routing.module';
 import { MaterialModule } from '../material/material.module';
 import { CardComponent } from './components/card/card.component';
+import { NewPostComponent } from './pages/new-post/new-post.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -14,12 +16,14 @@ import { CardComponent } from './components/card/card.component';
   declarations: [
     LayoutPageComponent,
     ListPageComponent,
-    CardComponent
+    CardComponent,
+    NewPostComponent
   ],
   imports: [
     CommonModule,
     PostsRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class PostsModule { }

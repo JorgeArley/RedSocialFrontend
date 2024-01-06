@@ -15,5 +15,11 @@ export interface UserID {
 export interface ApiResp {
   ok: boolean;
   posts: Post[];
-  total: Number
+  total: number
+}
+
+export interface NewPost {
+  title: String;
+  content: String;
+  likes: number;
 }

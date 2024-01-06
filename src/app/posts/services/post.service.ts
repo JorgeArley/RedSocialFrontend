@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environments } from '../../../environments/environments';
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
-import { ApiResp } from '../interfaces/post';
+import { ApiResp, NewPost, Post } from '../interfaces/post';
 
 
 @Injectable({
@@ -16,5 +16,9 @@ export class PostService {
 
   getPosts():Observable<ApiResp> {
     return this.http.get<ApiResp>(`${ this.baseUrl }/posts`);
+  }
+
+  addPost( post: NewPost ): Observable<Post> {
+    return this.http.post<Post>(`${ this.baseUrl }/posts`, post );
   }
 }

@@ -1,0 +1,21 @@
+.main {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.container-404 {
+  max-width: 400px;
+}
+
+.error-image {
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="%23333"><path d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="10" stroke="%23333" stroke-width="2"/><path d="M15 9l-6 6-6-6" stroke="%23333" stroke-width="2"/></svg>') center center no-repeat;
+  background-size: contain;
+  height: 100px;
+  width: 100px;
+  margin: 20px auto;
+}
