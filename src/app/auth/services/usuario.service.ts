@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../intefaces/user';
-import { tap } from 'rxjs';
+import { Observable, catchError, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
 const base_url = environments.baseUrl;
@@ -19,4 +19,16 @@ export class UsuarioService {
         tap( (user:any) => localStorage.setItem('token', user.token ))
       );
   }
+
+  getUserById( id: string ): Observable<User|undefined> {
+    return this.http.get<User>(`${base_url}/usuarios/${ id }`)
+      .pipe(
+        catchError( error => of(undefined) )
+      );
+  }
+
+  updateUser( user: any, idUser: string ): Observable<User> {
+    return this.http.put<User>(`${base_url}/usuarios/${ idUser }`, user );
+  }
+
 }

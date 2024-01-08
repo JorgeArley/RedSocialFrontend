@@ -10,25 +10,26 @@ import { Observable, tap } from 'rxjs';
 export class AuthService {
 
   private baseUrl = environments.baseUrl;
-  private user?: User;
+  public idUser: string = '';
 
   constructor(private http: HttpClient) { }
 
-  get currentUser():User|undefined {
-    if ( !this.user ) return undefined;
-    return structuredClone( this.user );
+  get id() {
+    return this.idUser
   }
 
   login( email: string, password: string ):Observable<User> {
     return this.http.post<User>(`${ this.baseUrl}/login`,{ email, password })
       .pipe(
-        tap( user => this.user = user ),
-        tap( (user:any) => localStorage.setItem('token', user.token ))
+        tap( user => this.idUser = user.user ),
+        tap( (user:User) => {
+          localStorage.setItem('token', user.token ),
+          localStorage.setItem('uid', user.user )
+        })
       );
   }
 
   logout() {
-    this.user = undefined;
     localStorage.clear();
   }
 

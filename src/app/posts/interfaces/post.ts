@@ -4,7 +4,7 @@ export interface Post {
   content: String;
   likes: Number;
   userId: UserID;
-  createdAt: String;
+  createdAt: string;
 }
 
 export interface UserID {

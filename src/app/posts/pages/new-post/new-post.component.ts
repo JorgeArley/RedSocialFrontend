@@ -3,6 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NewPost, Post } from '../../interfaces/post';
 import { PostService } from '../../services/post.service';
+import { switchMap } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-new-post',
@@ -12,8 +14,10 @@ import { PostService } from '../../services/post.service';
 export class NewPostComponent {
 
   public edit: boolean = false;
+  public idUser: string = '';
 
   public postForm = new FormGroup({
+    _id: new FormControl(''),
     title: new FormControl(''),
     content: new FormControl(''),
     likes: new FormControl<string>(''),
@@ -27,12 +31,36 @@ export class NewPostComponent {
     if (!this.router.url.includes('edit')) return;
 
     this.edit = true;
-    this.activatedRoute.params.subscribe(params => {
-      console.log(params)
-      return;
-    });
+    this.activatedRoute.params
+      .pipe(
+        switchMap(({ id }) => this.postService.getPostById(id)),
+      ).subscribe((post:any) => {
+        if (!post) {
+          return this.router.navigateByUrl('/');
+        }
+        this.idUser = post.post.userId._id;
+        this.postForm.reset(post.post);
+        return;
+      });
   }
   saveData() {
+    if (this.edit) {
+      const dataToSend = {
+        "title": this.postForm.value.title,
+        "content": this.postForm.value.content,
+        "likes": this.postForm.value.likes,
+        "userId": this.idUser,
+      }
+      this.postService.updatePost(dataToSend, this.postForm.value._id ?? '')
+      .subscribe({
+        next: (resp) => this.router.navigate(['/posts/list']),
+        error: (message) => {
+          Swal.fire('Error', message.error.msg, 'error');
+        }
+      })
+      return;
+    }
+
     const newPost: NewPost = {
       title: this.postForm.value.title || '',
       content: this.postForm.value.content || '',
@@ -40,9 +68,9 @@ export class NewPostComponent {
     };
 
     this.postService.addPost(newPost)
-    .subscribe((resp:Post) => {
-      console.log(resp)
+    .subscribe((resp) => {
+      Swal.fire('Hecho', `Publicación creada`, 'success');
+      this.router.navigateByUrl('posts/list');
     });
-    this.router.navigateByUrl('posts/list');
   }
 }
