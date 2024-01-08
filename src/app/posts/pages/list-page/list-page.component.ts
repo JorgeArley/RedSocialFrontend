@@ -3,6 +3,7 @@ import { PostService } from '../../services/post.service'
 import { ApiResp } from '../../interfaces/post';
 import { FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-page',
@@ -15,7 +16,8 @@ export class ListPageComponent {
   public searchInput = new FormControl('');
   public uid: string = '';
 
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService,
+              public router: Router) {}
 
   ngOnInit(): void {
     this.uid = localStorage.getItem('uid') || '';
@@ -34,9 +36,15 @@ export class ListPageComponent {
 
   getPost() {
     this.postService.getPosts()
-    .subscribe( (resp: ApiResp) => {
-      this.apiResp = resp;
-    });
+    .subscribe({
+      next: (resp: ApiResp) => {
+        this.apiResp = resp
+      },
+      error: (message) => {
+        Swal.fire('Error', message.error.msg, 'error');
+        this.router.navigate(['/auth/login']);
+      }
+    })
   }
 
   isOwner(id: String):boolean {

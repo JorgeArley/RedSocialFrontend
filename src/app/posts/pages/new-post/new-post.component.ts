@@ -68,9 +68,15 @@ export class NewPostComponent {
     };
 
     this.postService.addPost(newPost)
-    .subscribe((resp) => {
-      Swal.fire('Hecho', `Publicación creada`, 'success');
-      this.router.navigateByUrl('posts/list');
-    });
+    .subscribe({
+      next: (resp) => {
+        Swal.fire('Hecho', `Publicación creada`, 'success');
+        this.router.navigateByUrl('posts/list');
+      },
+      error: (message) => {
+        Swal.fire('Error', message.error.msg, 'error');
+        this.router.navigate(['/auth/login']);
+      }
+    })
   }
 }
